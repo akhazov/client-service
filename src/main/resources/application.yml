@@ -13,3 +13,19 @@ spring:
     url: jdbc:postgresql://localhost:5432/clients_service_db;
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+    hikari:
+      transaction-isolation: TRANSACTION_READ_COMMITTED
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.format_sql: true
+      hibernate.use_sql_comments: true
+      hibernate.default_schema: clients_schema
+  docker:
+    compose:
+      lifecycle-management: start_only
+
+logging:
+  level:
+    root: info

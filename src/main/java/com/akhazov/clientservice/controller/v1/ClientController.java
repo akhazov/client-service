@@ -1,7 +1,10 @@
 package com.akhazov.clientservice.controller.v1;
 
 import com.akhazov.clientservice.model.dto.CreateClientRequest;
+import com.akhazov.clientservice.model.dto.CreateClientResponse;
 import com.akhazov.clientservice.model.dto.FindClientRequest;
+import com.akhazov.clientservice.model.dto.GetClientResponse;
+import com.akhazov.clientservice.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -15,16 +18,18 @@ import java.util.UUID;
 @Tag(name = "Client controller", description = "API работы с клиентом.")
 public class ClientController {
 
+    private final ClientService clientService;
+
     @GetMapping("/{id}")
     @Operation(description = "Получение клиента по идентификатору.")
-    public String getClientById(@PathVariable UUID id) {
-        return "getClientById";
+    public GetClientResponse getClientById(@PathVariable UUID id) {
+        return clientService.getClientById(id);
     }
 
     @PostMapping
     @Operation(description = "Создание клиента.")
-    public String createClient(@RequestBody CreateClientRequest request) {
-        return "createClient";
+    public CreateClientResponse createClient(@RequestBody CreateClientRequest request) {
+        return clientService.createClient(request);
     }
 
     @PostMapping("/find")
