@@ -7,4 +7,9 @@ springdoc:
 
 spring:
   liquibase:
-    enabled: false
+    enabled: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/clients_service_db;
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}

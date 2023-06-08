@@ -1,0 +1,7 @@
+databaseChangeLog:
+  # Схема
+  - include:
+      file: db/changelog/1.0.0/schema/08-06-23-create_schema-clients_schema.sql
+  # Таблицы
+  - include:
+      file: db/changelog/1.0.0/table/08-06-23-create_table-clients.sql
