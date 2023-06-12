@@ -1,13 +1,14 @@
 package com.akhazov.clientservice.controller.v1;
 
-import com.akhazov.clientservice.model.dto.CreateClientRequest;
-import com.akhazov.clientservice.model.dto.CreateClientResponse;
-import com.akhazov.clientservice.model.dto.FindClientRequest;
-import com.akhazov.clientservice.model.dto.GetClientResponse;
+import com.akhazov.clientservice.model.dto.*;
 import com.akhazov.clientservice.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -33,9 +34,9 @@ public class ClientController {
     }
 
     @PostMapping("/find")
-    @Operation(description = "Поиск клиента.")
-    public String find(@RequestBody FindClientRequest request) {
-        return "findClient";
+    @Operation(description = "Поиск клиента. С возможность пагинации и сортировки.")
+    public Page<FoundClient> find(@Valid @RequestBody FindClientRequest request, @ParameterObject Pageable pageable) {
+        return clientService.findClients(request, pageable);
     }
 
 }
