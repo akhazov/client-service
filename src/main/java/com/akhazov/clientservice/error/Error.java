@@ -8,6 +8,6 @@ public interface Error {
 
     String getDescription();
 
-    HttpStatus getStatus();
+    HttpStatus getHttpStatus();
 
 }

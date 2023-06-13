@@ -29,8 +29,8 @@ public class ClientController {
 
     @PostMapping
     @Operation(description = "Создание клиента.")
-    public CreateClientResponse createClient(@RequestBody CreateClientRequest request) {
-        return clientService.createClient(request);
+    public CreateClientResponse createClient(@RequestHeader("x-Source") String source, @RequestBody CreateClientRequest request) {
+        return clientService.createClient(source, request);
     }
 
     @PostMapping("/find")

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.List;
 
-import static com.akhazov.clientservice.error.ClientServiceError.REQUEST_VALIDATION_ERROR;
+import static com.akhazov.clientservice.error.ValidationError.REQUEST_VALIDATION_ERROR;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @ControllerAdvice
@@ -21,18 +21,24 @@ public class ErrorHandler {
     public ResponseEntity<ErrorModel> serviceErrorHandler(ServiceException exception) {
         Error error = exception.getError();
         ErrorModel errorModel = new ErrorModel(error.getCode(), exception.getMessage(), null);
-        return new ResponseEntity<>(errorModel, error.getStatus());
+        return new ResponseEntity<>(errorModel, error.getHttpStatus());
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorModel> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        List<String> errors = ex.getBindingResult().getAllErrors()
+    public ResponseEntity<ErrorModel> handleValidationExceptions(MethodArgumentNotValidException exception) {
+        List<String> errors = exception.getBindingResult().getAllErrors()
                 .stream()
                 .map(error -> ((FieldError) error).getField() + " " + error.getDefaultMessage())
                 .toList();
 
         ErrorModel errorModel = new ErrorModel(REQUEST_VALIDATION_ERROR.getCode(), REQUEST_VALIDATION_ERROR.getDescription(), errors);
-        return new ResponseEntity<>(errorModel, REQUEST_VALIDATION_ERROR.getStatus());
+        return new ResponseEntity<>(errorModel, REQUEST_VALIDATION_ERROR.getHttpStatus());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorModel> commonExceptionsHandler(Exception exception) {
+        ErrorModel errorModel = new ErrorModel(REQUEST_VALIDATION_ERROR.getCode(), exception.getMessage(), null);
+        return new ResponseEntity<>(errorModel, REQUEST_VALIDATION_ERROR.getHttpStatus());
     }
 
     @JsonInclude(NON_NULL)

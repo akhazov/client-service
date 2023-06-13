@@ -5,6 +5,8 @@ import com.akhazov.clientservice.mapper.ClientMapper;
 import com.akhazov.clientservice.model.dto.*;
 import com.akhazov.clientservice.model.entity.Client;
 import com.akhazov.clientservice.repository.ClientRepository;
+import com.akhazov.clientservice.service.specification.ClientSpecificationService;
+import com.akhazov.clientservice.service.validation.CreateClientRequestValidationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -13,29 +15,33 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.akhazov.clientservice.error.ClientServiceError.CLIENT_NOT_FOUND;
-import static com.akhazov.clientservice.error.ClientServiceError.REQUEST_FIELD_NOT_BE_EMPTY;
+import static com.akhazov.clientservice.error.ServiceError.CLIENT_NOT_FOUND;
+import static com.akhazov.clientservice.error.ValidationError.REQUEST_FIELD_NOT_BE_EMPTY;
 
 @Service
 @Transactional
 public class ClientService {
     private final ClientRepository clientRepository;
     private final ClientMapper mapper;
-    private final SpecificationService specificationService;
+    private final ClientSpecificationService clientSpecificationService;
+    private final CreateClientRequestValidationService createClientRequestValidationService;
 
-    public ClientService(ClientRepository clientRepository, ClientMapper mapper, SpecificationService specificationService) {
+    public ClientService(ClientRepository clientRepository, ClientMapper mapper, ClientSpecificationService clientSpecificationService, CreateClientRequestValidationService createClientRequestValidationService) {
         this.clientRepository = clientRepository;
         this.mapper = mapper;
-        this.specificationService = specificationService;
+        this.clientSpecificationService = clientSpecificationService;
+        this.createClientRequestValidationService = createClientRequestValidationService;
     }
 
     /**
      * Метод создания слиента.
      *
+     * @param source  Источник из запроса.
      * @param request Данные запроса на создание клиента.
      * @return Ответ с идентификатором созданного клиента.
      */
-    public CreateClientResponse createClient(CreateClientRequest request) {
+    public CreateClientResponse createClient(String source, CreateClientRequest request) {
+        createClientRequestValidationService.validate(source, request);
         Client preparedClient = mapper.createRequestToEntity(request);
         Client savedClient = clientRepository.save(preparedClient);
         return new CreateClientResponse(savedClient.getId());
@@ -63,7 +69,7 @@ public class ClientService {
      */
     public Page<FoundClient> findClients(FindClientRequest request, Pageable pageable) {
         if (request.isBlank()) throw new ServiceException(REQUEST_FIELD_NOT_BE_EMPTY);
-        Specification<Client> searchSpecification = specificationService.getSearchClientSpec(request);
+        Specification<Client> searchSpecification = clientSpecificationService.getSearchClientSpec(request);
         return clientRepository.findAll(searchSpecification, pageable)
                 .map(mapper::entityToFoundClient);
     }

@@ -1,4 +1,4 @@
-package com.akhazov.clientservice.service;
+package com.akhazov.clientservice.service.specification;
 
 import com.akhazov.clientservice.model.dto.FindClientRequest;
 import com.akhazov.clientservice.model.entity.Client;
@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SpecificationService {
+public class ClientSpecificationService {
 
     public Specification<Client> getSearchClientSpec(FindClientRequest request) {
         return firstNameLike(request.firstName())
