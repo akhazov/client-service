@@ -51,4 +51,4 @@ git config core.autocrlf false - отключает автоматическое
       параметры `Settings -> Build, Execution, Deployment -> Build Tool -> Maven -> Runner -> Environment variables:`
 
 
-* <img alt="Run settings" height="221" src="etc/img.png" width="766"/>
+* <img alt="Run settings" height="221" src="etc/run_settings.png" width="766"/>
