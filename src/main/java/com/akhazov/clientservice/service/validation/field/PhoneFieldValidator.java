@@ -11,7 +11,7 @@ import static com.akhazov.clientservice.error.ValidationError.PHONE_NOT_MATCH_FO
 
 @Component
 public class PhoneFieldValidator implements FieldValidator<CreateClientRequest> {
-    private static final Pattern phonePattern = Pattern.compile("^\\d{10}$");
+    private static final Pattern phonePattern = Pattern.compile("^((7)+([0-9]){10})$");
 
     @Override
     public void validate(CreateClientRequest request) {

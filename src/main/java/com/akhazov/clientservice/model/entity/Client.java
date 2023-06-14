@@ -10,10 +10,10 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Entity
-@Table(name = "clients")
 @Getter
 @Setter
+@Entity
+@Table(name = "clients")
 public class Client {
 
     @Id
@@ -52,3 +52,4 @@ public class Client {
     private Integer version;
 
 }
+

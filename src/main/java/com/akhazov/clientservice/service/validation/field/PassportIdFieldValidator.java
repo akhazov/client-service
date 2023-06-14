@@ -11,7 +11,7 @@ import static com.akhazov.clientservice.error.ValidationError.PASSPORT_ID_NOT_MA
 
 @Component
 public class PassportIdFieldValidator implements FieldValidator<CreateClientRequest> {
-    private static final Pattern idPattern = Pattern.compile("^(d{4}) (d{6})$");
+    private static final Pattern idPattern = Pattern.compile("\\d{4}\\s\\d{6}");
 
     @Override
     public void validate(CreateClientRequest request) {
